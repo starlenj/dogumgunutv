@@ -18,6 +18,7 @@ const SessionWrapper = (Component) => (props) => {
           window.location.href = "/login";
         } else {
           session = responseToken.data.data;
+
         }
       });
   }
