@@ -37,6 +37,15 @@ class ProductNewForm extends Component {
           />
         </div>
         <div className="form-group">
+          <label htmlFor="firstName">İzleyici Sayısı :</label>
+          <Field
+            name="StreamCount"
+            component="input"
+            className="form-control"
+            type="number"
+          />
+        </div>
+        <div className="form-group">
           <label htmlFor="firstName">Açıklama :</label>
           <Field name="Info" component={ReactMDE} />
         </div>

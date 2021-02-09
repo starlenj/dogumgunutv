@@ -6,14 +6,14 @@ const SessionWrapper = (Component) => (props) => {
     */
   var path = window.location.pathname.split("/");
   var Session;
-  if (localStorage.getItem("inToken") === null && path[1] !== "Login") {
+  if (localStorage.getItem("dgToken") === null && path[1] !== "Login" && path[1] !== "Register" && path[1] !== "UserOnayla") {
     window.location.href = "/Login";
   } else {
     //TOKEN VALID
     let SessionResponse = axios.post(
       "http://localhost:4000/Api/V1/ValidToken",
       {
-        token: localStorage.getItem("inToken"),
+        token: localStorage.getItem("dgToken"),
       }
     );
     Session = SessionResponse;

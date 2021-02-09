@@ -1,10 +1,12 @@
 import Header from "../../Component/Header";
+import LiveStreams from "../../Component/LiveStream";
 import SideBar from "../../Component/SideBar";
 function Home({ session }) {
   return (
-    <div>
+    <div className="wrapper">
       <Header Oturum={session} />
       <SideBar Oturum={session} />
+      <LiveStreams />
     </div>
   );
 }

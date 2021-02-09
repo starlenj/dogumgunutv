@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   Phone: { type: String, default: "" },
   PhoneSubmit: { type: String },
   Tc: { type: String, default: "" },
-  Gender: { type: String, default: "" },
+  StreamKey: { type: String, default: "" }
 });
 
 module.exports = Restful.model("Users", UserSchema);

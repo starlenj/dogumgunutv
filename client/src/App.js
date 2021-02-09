@@ -5,44 +5,30 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 ///PAGES
 import Login from "./Pages/Login";
+import UserOnay from "./Pages/UserOnay";
+import Register from "./Pages/Register";
 import Home from "./Pages/Home";
-import User from "./Pages/User";
-import Category from "./Pages/Category";
-import Product from "./Pages/Product";
-import Order from "./Pages/Order";
-import Odeme from "./Pages/Odeme";
-import Pages from "./Pages/Page";
-import Ticket from "./Pages/Ticket";
-import Soru from "./Pages/Soru";
+import YayinTalebi from "./Pages/YayinTalebi/yayintalebi_page";
 
 const Root = ({ refetch, session }) => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" render={() => <Home session={session} />} />
       <Route exact path="/Login" render={() => <Login />} />
-      <Route exact path="/User" render={() => <User session={session} />} />
-      <Route exact path="/Order" render={() => <Order session={session} />} />
-      <Route exact path="/Odeme" render={() => <Odeme session={session} />} />
-      <Route exact path="/Pages" render={() => <Pages session={session} />} />
-      <Route exact path="/Ticket" render={() => <Ticket session={session} />} />
-      <Route exact path="/Soru" render={() => <Soru session={session} />} />
-      <Route
-        exact
-        path="/Product"
-        render={() => <Product session={session} />}
-      />
-      <Route
-        exact
-        path="/Category"
-        render={() => <Category session={session} />}
-      />
+      <Route exact path="/Register" render={() => <Register />} />
+      <Route exact path="/YayinTalebi" render={() => <YayinTalebi session={session} />} />
       <Route
         exact
         path="/User/Logout"
         render={() => {
-          localStorage.removeItem("inToken");
+          localStorage.removeItem("dgToken");
           window.location.href = "/Login";
         }}
+      />
+      <Route
+        exact
+        path="/UserOnayla/:token"
+        render={() => <UserOnay />}
       />
     </Switch>
   </BrowserRouter>
@@ -53,7 +39,7 @@ export default class App extends Component {
   render() {
     return (
       <Fragment>
-        <ToastContainer />
+        <ToastContainer position={"bottom-right"} />
         <RootWithSessionWrapper />
       </Fragment>
     );

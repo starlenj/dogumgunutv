@@ -16,7 +16,7 @@ export default class Login extends Component {
     const { Email, Password } = this.state;
     let Response = await Post("Login", { Email, Password });
     if (Response.success) {
-      localStorage.setItem("inToken", Response.data);
+      localStorage.setItem("dgToken", Response.data);
       setTimeout(() => {
         window.location.href = "/";
       }, 2000);
@@ -24,7 +24,7 @@ export default class Login extends Component {
   };
   componentDidMount() {
     var path = window.location.pathname.split("/");
-    if (localStorage.getItem("inToken") !== null && path[1] === "Login") {
+    if (localStorage.getItem("dgToken") !== null && path[1] === "Login") {
       window.location.href = "/";
     }
   }
@@ -73,12 +73,12 @@ export default class Login extends Component {
                 <form class="mt-4">
                   <div class="form-group">
                     <label for="exampleInputEmail1">E-Posta</label>
-                    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="E-Posta" name="Email" />
+                    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="E-Posta" name="Email" onChange={this.HandleInput} />
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Şifre</label>
                     <a href="#" class="float-right">Şifremi Unuttum?</a>
-                    <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Şifre" name="Password" />
+                    <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Şifre" name="Password" onChange={this.HandleInput} />
                   </div>
                   <div class="d-inline-block w-100">
                     <div class="custom-control custom-checkbox d-inline-block mt-2 pt-1">
@@ -88,7 +88,7 @@ export default class Login extends Component {
                     <button type="button" class="btn btn-primary float-right" onClick={this.HandleLogin}>Giriş Yap</button>
                   </div>
                   <div class="sign-info">
-                    <span class="dark-color d-inline-block line-height-2">Hesabın Yok mu? <a href="#">Kayıt Ol</a></span>
+                    <span class="dark-color d-inline-block line-height-2">Hesabın Yok mu? <a href="/Register">Kayıt Ol</a></span>
                     <ul class="iq-social-media">
                       <li><a href="#"><i class="ri-facebook-box-line"></i></a></li>
                       <li><a href="#"><i class="ri-twitter-line"></i></a></li>

@@ -7,10 +7,8 @@ import ReactMDE from "redux-forms-markdown-editor";
 import { connect } from "react-redux";
 
 class ProductUpdateForm extends Component {
-  state = { Category: [], editorState: EditorState.createEmpty() };
+  state = { editorState: EditorState.createEmpty() };
   async componentDidMount() {
-    let Category = await List("Category");
-    this.setState({ Category });
     this.props.initialize(this.props.FormValues);
   }
   render() {
@@ -19,14 +17,7 @@ class ProductUpdateForm extends Component {
     );
     return (
       <form onSubmit={this.props.handleSubmit}>
-        <div className="form-group">
-          <Field name="CategoryId" className="form-control" component="select">
-            <option>--Lütfen Kategori Seçiniz--</option>
-            <option value="0.05" >0.05</option>
-            <option value="0.50" >0.50</option>
-            <option value="1.00" >1.00</option>
-          </Field>
-        </div>
+
         <div className="form-group">
           <label htmlFor="firstName">Adı :</label>
           <Field
@@ -40,6 +31,16 @@ class ProductUpdateForm extends Component {
           <label htmlFor="firstName">Fiyat :</label>
           <Field
             name="Price"
+            component="input"
+            className="form-control"
+            type="number"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="firstName">İzleyici Sayısı :</label>
+          <Field
+            name="StreamCount"
             component="input"
             className="form-control"
             type="number"

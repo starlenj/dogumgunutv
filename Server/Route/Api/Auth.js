@@ -4,7 +4,7 @@ const UserModel = require("../../Models/User");
 const { HandleError, HandleResponse } = require("../../Helper/HandleResponse");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const shortId = require("shortid");
 Router.post("/Register", async (req, res) => {
   try {
     const { Phone, Email, Password, Name } = req.body;
@@ -18,12 +18,13 @@ Router.post("/Register", async (req, res) => {
         Password: hash,
         Name,
         Phone,
+        StreamKey: shortId.generate()
       })
       const NewUserReponse = await NewUser.save();
       const token = jwt.sign({ data: NewUserReponse }, process.env.SECRET, {
         expiresIn: Math.floor(Date.now() / 1000) + 60 * 60,
       });
-      HandleResponse(req, res, "Kullanıcı Kaydı Oluşturuldu", token);
+      HandleResponse(req, res, "Kullanıcı Kaydı Oluşturuldu. Lütfen mailinizi onaylayınız", token);
     });
   } catch (e) {
     console.error(e);
@@ -37,6 +38,9 @@ Router.post("/Login", async (req, res) => {
     let CheckUser = await UserModel.find({ Email });
     if (CheckUser.length === 0) {
       HandleError(req, res, "Kullanıcı Kaydı Bulunmadı");
+    }
+    if (!CheckUser[0].Status) {
+      HandleError(req, res, "Lütfen mail adresinize gelen maili onaylayınız!!");
     }
     let IsValid = bcrypt.compareSync(Password, CheckUser[0].Password);
     if (!IsValid) {

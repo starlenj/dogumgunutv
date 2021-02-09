@@ -15,14 +15,12 @@ class Product extends Component {
     UpdateStatus: false,
     DeleteStatus: false,
     EditStatsus: true,
-    ProductImage: "",
   };
   constructor(props) {
     super(props);
     this.HandleInput = this.HandleInput.bind(this);
     this.HandleSubmit = this.HandleSubmit.bind(this);
     this.HandleDelete = this.HandleDelete.bind(this);
-    this.ImageUpload = this.ImageUpload.bind(this);
   }
   HandleInput(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -61,21 +59,18 @@ class Product extends Component {
         selector: "Name",
         sortable: true,
       },
-      {
-        name: "Kategori",
-        selector: "Category",
-        sortable: true,
-      },
+
       {
         name: "Fiyatı",
         selector: "Price",
         sortable: true,
       },
       {
-        name: "Durumu",
-        selector: "Status",
+        name: "İzleyici Sayısı",
+        selector: "StreamCount",
         sortable: true,
       },
+
     ];
     this.setState({ Columns });
   }
@@ -83,22 +78,13 @@ class Product extends Component {
     const ProductData = await List("Product");
     const ProductFilterData = [];
     ProductData.map(async (Product) => {
-      let response = await Get("Category", Product.CategoryId);
       ProductFilterData.push({
         ...Product,
-        Category: Product.CategoryId,
       });
       this.setState({ Data: ProductFilterData });
     });
   }
-  async ImageUpload(e) {
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    let ResponseImageUpload = await Post("UploadImage", formData);
-    this.setState({ ProductImage: ResponseImageUpload.filename });
-    let UploadImage = await Post("ProductImageUpload", { ProfilePicture: this.state.ProductImage, id: this.props.DataTableReducer.SelectData._id });
-    setTimeout(() => { window.location.reload() }, 2000)
-  }
+
   render() {
     const { SelectData } = this.props.DataTableReducer;
     const NewModal = () => <NewForm onSubmit={this.HandleSubmit} />;
@@ -162,10 +148,7 @@ class Product extends Component {
           </div>
         )}
         <div>
-          <div className="form-group">
-            <label>Ürün Resmi</label>
-            <input type="file" className="form-control" onChange={this.ImageUpload} />
-          </div>
+
         </div>
       </div>
     );
