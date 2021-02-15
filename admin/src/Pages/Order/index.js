@@ -1,10 +1,14 @@
 import { Component } from "react";
 import DataTableComponent from "../../Component/DataTable";
 import { List, Post, Put, Delete, Get } from "../../Helper/Service";
-
-export default class Order extends Component {
+import UpdateOrderModalForm from '../../Component/Forms/Order/edit-order'
+import { Modal, Button } from "react-bootstrap";
+import { connect } from 'react-redux'
+import { SetSelectData } from "../../Redux/Action/DataTable";
+class Order extends Component {
   state = {
     Data: [],
+    ShowUpdateModal: false
   };
   async componentDidMount() {
     await this.GetDataTable();
@@ -25,32 +29,51 @@ export default class Order extends Component {
         selector: "Date",
         sortable: true,
       },
-      {
-        name: "Durumu",
-        selector: "Status",
-        sortable: true,
-      },
+
     ];
     this.setState({ Columns });
   }
   async GetDataTable() {
-    const OrderHeaderData = await List("OrderHeader");
-    const ProductFilterData = [];
-    OrderHeaderData.map(async (OrderHeader) => {
-      let response = await Get("OrderBody", OrderHeader._id);
-      ProductFilterData.push({
-        ...OrderHeader,
-        OrderBody: response,
-      });
-      this.setState({ Data: ProductFilterData });
-    });
+    let response = await List("OrderBody");
+    this.setState({ Data: response });
   }
+
+
   render() {
+
+    const UpdateModal = () => (
+
+      <div>
+        <span>İşlem Onaylamak veya Reddetmek İstiyor musunuz?</span>
+        <br />
+        <br />
+        <br />
+        <div >
+          <button className="btn btn-primary" onClick={() => this.IslemOnaylama()} data-dismiss="modal">Onayla</button>{"         "}
+          <button className="btn btn-danger" data-dismiss="modal" onClick={() => this.IslemReddet()} >Reddet</button>
+          <button className="btn btn-success" data-dismiss="modal" data-target="#UpdateOrderModal" onClick={() => this.setState({ ShowUpdateModal: true })} >Revize Et</button>{"        "}
+        </div>
+
+        <Modal
+          show={this.state.ShowUpdateModal}
+          onHide={this.HandleCloseUpdateModal}
+          closeButton
+        >
+          <Modal.Header>
+            <Modal.Title>Sipariş Revize Et</Modal.Title>
+          </Modal.Header>
+          <Modal.Body><UpdateOrderModalForm FormValues={this.props.DataTableReducer.SelectData} /></Modal.Body>
+        </Modal>
+
+      </div>
+
+    );
+
     return (
       <div>
         <DataTableComponent
           NewDataTitle={"Yeni Ürün Tanımı"}
-          UpdateDataTitle={"Ürün Düzenle"}
+          UpdateDataTitle={"Sipariş Düzenle"}
           NewModal={() => <div></div>}
           NewData={false}
           columns={this.state.Columns}
@@ -58,10 +81,21 @@ export default class Order extends Component {
           data={this.state.Data}
           title={"Sipariş Listesi"}
           filterField={"ProductName"}
-          UpdateModal={() => <div></div>}
+          UpdateModal={<UpdateModal />}
           UpdateAction={this.UpdateUser}
+          UpdateData={true}
+
         />
       </div>
     );
   }
 }
+const mapStateToProps = ({ DataTableReducer }) => {
+  return {
+    DataTableReducer,
+  };
+};
+const mapDispatchToProps = {
+  SetSelectData,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Order);
