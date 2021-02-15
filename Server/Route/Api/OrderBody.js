@@ -9,4 +9,12 @@ Router.post("/GetUserOrder", async (req, res) => {
     let Response = await Model.find({ UserId });
     HandleResponse(req, res, null, Response);
 })
+Router.post("/OrderUpdateStatus",async(req,res)=>{
+let {Status,id}= req.body
+let UpdateData = await  Model.findById(id)
+  UpdateData.Status=Status
+let Response = await  UpdateData.save();
+  HandleResponse(req,res,"Siparis Durumu Guncellendi",Response);
+})
+
 module.exports = Router;

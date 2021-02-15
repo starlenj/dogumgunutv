@@ -35,13 +35,18 @@ const YayinTalebiList = ({ OrderList }) => {
                                             <th scope="row">{index + 1}</th>
                                             <td>{Order.Date}</td>
                                             <td>{Order.ProductName}</td>
-                                            <td>{Order.Status === true ? "Onaylandı" : "Onay Bekliyor"}</td>
+                                            <td>{Order.Status  === 1 ? "Onaylandi" :  (Order.Status === -1) ? "Talebiniz Reddedildi" : "Talebiniz Onaylandi" }</td>
                                             <td>
-                                                {Order.Status === true ?
-                                                    <button className="btn btn-primary" data-toggle="modal" data-target="#OrderUser" onClick={() => setSelectOrder(Order)}>İzleyici Ekle</button>
+                                      {
+                                        Order.Status === -1 &&(
+                                                    <button className="btn btn-primary" data-toggle="modal" >Yayin Talebi Reddedildi</button>
 
-                                                    : <button className="btn btn-danger" onClick={() => SetOrderPayment(Order)}>Ödeme Yap</button>
 
+                                        )
+                                      }
+                                                {Order.Status === 1&& 
+                                    (                <button className="btn btn-primary" data-toggle="modal" data-target="#OrderUser" onClick={() => setSelectOrder(Order)}>İzleyici Ekle</button>
+                                    )
                                                 }
                                             </td>
 

@@ -1,14 +1,14 @@
 import { Component } from "react";
 import DataTableComponent from "../../Component/DataTable";
 import { List, Post, Put, Delete, Get } from "../../Helper/Service";
-import UpdateOrderModalForm from '../../Component/Forms/Order/edit-order'
+import UpdateOrderModalForm from "../../Component/Forms/Order/edit-order";
 import { Modal, Button } from "react-bootstrap";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 import { SetSelectData } from "../../Redux/Action/DataTable";
 class Order extends Component {
   state = {
     Data: [],
-    ShowUpdateModal: false
+    ShowUpdateModal: false,
   };
   async componentDidMount() {
     await this.GetDataTable();
@@ -29,7 +29,6 @@ class Order extends Component {
         selector: "Date",
         sortable: true,
       },
-
     ];
     this.setState({ Columns });
   }
@@ -37,36 +36,62 @@ class Order extends Component {
     let response = await List("OrderBody");
     this.setState({ Data: response });
   }
+  async IslemOnaylama(){
+    let OrderUpdate = await Post('OrderUpdateStatus',{id : this.props.DataTableReducer.SelectData._id,Status :1})
+  }
+  async IslemReddet(){
+  
+    let OrderUpdate = await Post('OrderUpdateStatus',{id : this.props.DataTableReducer.SelectData._id,Status :-1})
 
-
+  }
   render() {
-
     const UpdateModal = () => (
-
       <div>
         <span>İşlem Onaylamak veya Reddetmek İstiyor musunuz?</span>
         <br />
         <br />
         <br />
-        <div >
-          <button className="btn btn-primary" onClick={() => this.IslemOnaylama()} data-dismiss="modal">Onayla</button>{"         "}
-          <button className="btn btn-danger" data-dismiss="modal" onClick={() => this.IslemReddet()} >Reddet</button>
-          <button className="btn btn-success" data-dismiss="modal" data-target="#UpdateOrderModal" onClick={() => this.setState({ ShowUpdateModal: true })} >Revize Et</button>{"        "}
+        <div>
+          <button
+            className="btn btn-primary"
+            onClick={() => this.IslemOnaylama()}
+            data-dismiss="modal"
+          >
+            Onayla
+          </button>
+          {"         "}
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            onClick={() => this.IslemReddet()}
+          >
+            Reddet
+          </button>
+          <button
+            className="btn btn-success"
+            data-dismiss="modal"
+            data-target="#UpdateOrderModal"
+            onClick={() => this.setState({ ShowUpdateModal: true })}
+          >
+            Revize Et
+          </button>
+          {"        "}
         </div>
 
         <Modal
           show={this.state.ShowUpdateModal}
-          onHide={this.HandleCloseUpdateModal}
-          closeButton
+          onHide={() => this.setState({ ShowUpdateModal: false })}
         >
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>Sipariş Revize Et</Modal.Title>
           </Modal.Header>
-          <Modal.Body><UpdateOrderModalForm FormValues={this.props.DataTableReducer.SelectData} /></Modal.Body>
+          <Modal.Body>
+            <UpdateOrderModalForm
+              FormValues={this.props.DataTableReducer.SelectData}
+            />
+          </Modal.Body>
         </Modal>
-
       </div>
-
     );
 
     return (
@@ -84,7 +109,6 @@ class Order extends Component {
           UpdateModal={<UpdateModal />}
           UpdateAction={this.UpdateUser}
           UpdateData={true}
-
         />
       </div>
     );
